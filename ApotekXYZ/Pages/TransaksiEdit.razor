@@ -1,0 +1,60 @@
+﻿@page "/EditTransaksi/{Id}"
+@using ApotekXYZ.Data
+@inject TransaksiService transaksiService
+@inject NavigationManager NavigationManager
+
+<h2>Edit Transaksi</h2>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <input form="Name" class="form-control" @bind="@obj.idTransaksi" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Kode Obat</label>
+                <input form="Name" class="form-control" @bind="@obj.kodeObat" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Jumlah Jual</label>
+                <input form="Name" class="form-control" @bind="@obj.jumlahJual" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Kode Apoteker</label>
+                <input form="Name" class="form-control" @bind="@obj.kodeApoteker" />
+            </div>
+            <div class="form-group">
+                <label for="Designation" class="control-label">Tanggal Beli</label>
+                <input type="date" form="Designation" class="form-control" @bind="@obj.tanggalBeli" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@UpdateApoteker" value="Update" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    Transaksi obj = new Transaksi();
+    protected override async Task OnInitializedAsync()
+    {
+        obj = await Task.Run(() => transaksiService.GetEmployeeAsync(Id));
+    }
+    protected async void UpdateApoteker()
+    {
+        await transaksiService.UpdateEmployeeAsync(obj);
+        NavigationManager.NavigateTo("TransaksiData");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("TransaksiData");
+    }
+}

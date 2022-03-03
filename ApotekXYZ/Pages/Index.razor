@@ -1,0 +1,44 @@
+﻿@page "/"
+@inject Blazored.SessionStorage.ISessionStorageService localStorage
+
+@if (UserName == null)
+{
+    <h3>Kamu membutuhkan Login Untuk Mengakses Ini.!</h3>
+}
+else
+{
+    <h1>Hello, @UserName!</h1>
+    <h3>Selamat Datang di APOTEK XYZ.</h3>
+
+
+}
+
+@code
+{
+    string UserName { get; set; }
+    string UserSession { get; set; }
+    string LoginName { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetLocalSession();
+
+            localStorage.Changed += (sender, e) =>
+            {
+                Console.WriteLine($"Value for key {e.Key} changed from {e.OldValue} to {e.NewValue}");
+            };
+
+            StateHasChanged();
+        }
+    }
+
+    async Task GetLocalSession()
+    {
+        UserName = await localStorage.GetItemAsync<string>("UserName");
+        UserSession = await localStorage.GetItemAsync<string>("UserSession");
+    }
+
+
+}

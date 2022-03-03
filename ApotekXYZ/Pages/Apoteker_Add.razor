@@ -1,0 +1,49 @@
+﻿@page "/AddEmployee"
+@using ApotekXYZ.Data
+@inject ApotekerService apotekerService
+@inject NavigationManager NavigationManager
+
+<h2>Add Apoteker</h2>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Kode" class="control-label">Kode Apoteker</label>
+                <input form="Kode" class="form-control" @bind="@obj.kodeApoteker" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Nama Apoteker</label>
+                <input form="Name" class="form-control" @bind="@obj.namaApoteker" />
+            </div>
+            <div class="form-group">
+                <label for="tnglLahir" class="control-label">Tanggal Lahir</label>
+                <input type="date" form="tglLahir" class="form-control" @bind="@obj.tanggalLahir" />
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateApoteker" value="Save" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    Apoteker obj = new Apoteker();
+    protected async void CreateApoteker()
+    {
+        await apotekerService.InsertEmployeeAsync(obj);
+        NavigationManager.NavigateTo("ApotekerData");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("ApotekerData");
+    }
+}

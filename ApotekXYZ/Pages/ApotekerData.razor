@@ -1,0 +1,53 @@
+﻿@page "/ApotekerData"
+@using ApotekXYZ.Data
+@inject ApotekerService apotekerService
+
+<NavLink class="nav-link" href="AddEmployee">
+    <span class="oi oi-plus" aria-hidden="true">Add New</span>
+
+</NavLink>
+
+<h1>Apoteker Info</h1>
+@if (EmpObj is null)
+{
+    <p><em>Loading... !</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Kode Apoteker</th>
+                <th>Nama Apoteker</th>
+                <th>Tanggal Lahir</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var emp in EmpObj)
+            { 
+                <tr>
+                    <td>@emp.kodeApoteker</td>
+                    <td>@emp.namaApoteker</td>
+                    <td>@emp.tanggalLahir.ToShortDateString()</td>
+                    <td>
+                        <a class="nav-link" href="EditApoteker/@emp.kodeApoteker">
+                            <span class="oi oi-pencil" aria-hidden="true">Edit</span>
+                        </a>
+                        <a class="nav-link" href="DeleteApoteker/@emp.kodeApoteker">
+                            <span class="oi oi-trash" aria-hidden="true">Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    List<Apoteker> EmpObj;
+    protected override async Task OnInitializedAsync()
+    {
+        EmpObj = await Task.Run(() => apotekerService.GetAllEmployeesAsync());
+    }
+}

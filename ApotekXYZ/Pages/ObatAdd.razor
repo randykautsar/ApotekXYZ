@@ -1,0 +1,57 @@
+﻿@page "/AddObat"
+@using ApotekXYZ.Data
+@inject ObatService obatService
+@inject NavigationManager NavigationManager
+
+<h2>Add Obat</h2>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Kode" class="control-label">Kode Obat</label>
+                <input form="Kode" class="form-control" @bind="@obj.kodeObat" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Nama Obat</label>
+                <input form="Name" class="form-control" @bind="@obj.namaObat" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Harga Obat</label>
+                <input form="Name" class="form-control" @bind="@obj.HargaObat" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Sisa Obat</label>
+                <input form="Name" class="form-control" @bind="@obj.sisaObat" />
+            </div>
+            <div class="form-group">
+                <label for="tnglLahir" class="control-label">Tanggal Kdaluarsa</label>
+                <input type="date" form="tglLahir" class="form-control" @bind="@obj.tanggalKadaluarsa" />
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateApoteker" value="Save" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    Obat obj = new Obat();
+    protected async void CreateApoteker()
+    {
+        await obatService.InsertEmployeeAsync(obj);
+        NavigationManager.NavigateTo("ObatData");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("ObatData");
+    }
+}

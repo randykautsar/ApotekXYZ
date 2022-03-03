@@ -1,0 +1,57 @@
+﻿@page "/ObatData"
+@using ApotekXYZ.Data
+@inject ObatService obatService
+
+<NavLink class="nav-link" href="AddObat">
+    <span class="oi oi-plus" aria-hidden="true">Add New</span>
+
+</NavLink>
+
+<h1>Obat Info</h1>
+@if (EmpObj is null)
+{
+    <p><em>Loading... !</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Kode Obat</th>
+                <th>Nama Obat</th>
+                <th>Harga Obat</th>
+                <th>Sisa Obat</th>
+                <th>Tanggal Kadaluarsa</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var emp in EmpObj)
+            {
+            <tr>
+                <td>@emp.kodeObat</td>
+                <td>@emp.namaObat</td>
+                <td>@emp.HargaObat</td>
+                <td>@emp.sisaObat</td>
+                <td>@emp.tanggalKadaluarsa.ToShortDateString()</td>
+                <td>
+                    <a class="nav-link" href="EditObat/@emp.kodeObat">
+                        <span class="oi oi-pencil" aria-hidden="true">Edit</span>
+                    </a>
+                    <a class="nav-link" href="DeleteObat/@emp.kodeObat">
+                        <span class="oi oi-trash" aria-hidden="true">Delete</span>
+                    </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    List<Obat> EmpObj;
+    protected override async Task OnInitializedAsync()
+    {
+        EmpObj = await Task.Run(() => obatService.GetAllEmployeesAsync());
+    }
+}

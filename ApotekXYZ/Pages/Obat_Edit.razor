@@ -1,0 +1,60 @@
+﻿@page "/EditObat/{Id}"
+@using ApotekXYZ.Data
+@inject ObatService obatService
+@inject NavigationManager NavigationManager
+
+<h2>Edit Obat</h2>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <input form="Name" class="form-control" @bind="@obj.kodeObat" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Nama Obat</label>
+                <input form="Name" class="form-control" @bind="@obj.namaObat" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Harga Obat</label>
+                <input form="Name" class="form-control" @bind="@obj.HargaObat" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Sisa Obat</label>
+                <input form="Name" class="form-control" @bind="@obj.sisaObat" />
+            </div>
+            <div class="form-group">
+                <label for="Designation" class="control-label">Tanggal Kadaluarsa</label>
+                <input type="date" form="Designation" class="form-control" @bind="@obj.tanggalKadaluarsa" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@UpdateApoteker" value="Update" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    Obat obj = new Obat();
+    protected override async Task OnInitializedAsync()
+    {
+        obj = await Task.Run(() => obatService.GetEmployeeAsync(Id));
+    }
+    protected async void UpdateApoteker()
+    {
+        await obatService.UpdateEmployeeAsync(obj);
+        NavigationManager.NavigateTo("ApotekerData");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("ApotekerData");
+    }
+}

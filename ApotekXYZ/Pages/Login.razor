@@ -1,0 +1,75 @@
+﻿@page "/login"
+@inject Blazored.SessionStorage.ISessionStorageService localStorage
+@inject NavigationManager NavigationManager
+
+<hr class="mb-5" />
+<div class="row mb-5">
+
+    <div class="col-md-4">
+        @if (UserName == null)
+        {
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Username" @bind="LoginName" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" @onclick="LoginUser">Login</button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div>
+                <p>Logged in as: <strong>@UserName</strong></p>
+                <button class="btn btn-primary" @onclick="Logout">Logout</button>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+
+    string UserName { get; set; }
+    string UserSession { get; set; }
+    string LoginName { get; set; }
+
+    [CascadingParameter]
+    public MainLayout Layout { get; set; }
+
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetLocalSession();
+
+            localStorage.Changed += (sender, e) =>
+            {
+                Console.WriteLine($"Value for key {e.Key} changed from {e.OldValue} to {e.NewValue}");
+            };
+
+            StateHasChanged();
+
+        }
+    }
+
+    async Task LoginUser()
+    {
+        await localStorage.SetItemAsync("UserName", LoginName);
+        await localStorage.SetItemAsync("UserSession", "PIOQJWDPOIQJWD");
+        await GetLocalSession();
+        NavigationManager.NavigateTo("",true);
+    }
+
+    async Task GetLocalSession()
+    {
+        UserName = await localStorage.GetItemAsync<string>("UserName");
+        UserSession = await localStorage.GetItemAsync<string>("UserSession");
+    }
+
+    async Task Logout()
+    {
+        await localStorage.RemoveItemAsync("UserName");
+        await localStorage.RemoveItemAsync("UserSession");
+        await GetLocalSession();
+    }
+}

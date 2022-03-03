@@ -1,0 +1,57 @@
+﻿@page "/AddTransaksi"
+@using ApotekXYZ.Data
+@inject TransaksiService transaksiService
+@inject NavigationManager NavigationManager
+
+<h2>Add Transaksi</h2>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Kode" class="control-label">Transaksi ID</label>
+                <input form="Kode" class="form-control" @bind="@obj.idTransaksi" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Kode Obat</label>
+                <input form="Name" class="form-control" @bind="@obj.kodeObat" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Jumah Jual</label>
+                <input form="Name" class="form-control" @bind="@obj.jumlahJual" />
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Kode Apoteker</label>
+                <input form="Name" class="form-control" @bind="@obj.kodeApoteker" />
+            </div>
+            <div class="form-group">
+                <label for="tnglLahir" class="control-label">Tanggal Beli</label>
+                <input type="date" form="tglLahir" class="form-control" @bind="@obj.tanggalBeli" />
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateApoteker" value="Save" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    Transaksi obj = new Transaksi();
+    protected async void CreateApoteker()
+    {
+        await transaksiService.InsertEmployeeAsync(obj);
+        NavigationManager.NavigateTo("TransaksiData");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("TransaksiData");
+    }
+}
